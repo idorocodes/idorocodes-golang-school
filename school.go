@@ -72,11 +72,11 @@ func (s *School) addDepartment(deptName string) (bool, error) {
 		return false, errors.New("department name not supplied!")
 	}
 	currentDepartments := s.SchoolDepartments
-	
+
 	if len(currentDepartments) > 10 {
 		return false, errors.New("A School cannot have more than 10 departments")
 	}
-	
+
 	deptId := rand.Int()
 
 	var emptyStudent []Student
@@ -91,7 +91,7 @@ func (s *School) addDepartment(deptName string) (bool, error) {
 	return true, nil
 }
 
-func (s *School) removeDepartment(preferedDepartment Department) (bool, error) {
+func (s *School) removeDepartment(deptId int) (bool, error) {
 	currentDepartments := s.SchoolDepartments
 
 	if len(currentDepartments) == 0 {
@@ -99,7 +99,7 @@ func (s *School) removeDepartment(preferedDepartment Department) (bool, error) {
 	}
 
 	index := slices.IndexFunc(s.SchoolDepartments, func(d Department) bool {
-		return d.DepartmentId == preferedDepartment.DepartmentId
+		return d.DepartmentId == deptId
 	})
 
 	if index == -1 {
@@ -134,46 +134,171 @@ func (s *School) editDepartment(departmentId int, newName string) (bool, error) 
 	return true, nil
 }
 
-func (d *Department) addStudent(studentName string, matricNo string, age int) (bool,error) {
-	
+func (d *Department) addStudent(studentName string, matricNo string, age int) (bool, error) {
+
 	if len(studentName) == 0 {
 		return false, errors.New("Name not supplied!")
 	}
-	
+
 	if age <= 0 {
-			return false, errors.New("Invalid age!")
+		return false, errors.New("Invalid age!")
 	}
-	
-	if len(matricNo)  == 0 {
-			return false, errors.New("Matric Number not supplied! ")
+
+	if len(matricNo) == 0 {
+		return false, errors.New("Matric Number not supplied! ")
 	}
-	
+
 	currentStudents := d.DepartmentStudents
-	
+
 	if len(currentStudents) > 100 {
 		return false, errors.New("A Department cannot have more than 100 students")
 	}
-	
+
 	studId := rand.Int()
-	
+
 	dept := *d
-	
-	var newCourse  []Course
-	
+
+	var newCourse []Course
+
 	newStudent := Student{
-		StudentName: studentName,
-		StudentId: studId,
-		StudentMatricNo:matricNo,
-		StudentAge: age,
+		StudentName:       studentName,
+		StudentId:         studId,
+		StudentMatricNo:   matricNo,
+		StudentAge:        age,
 		StudentDepartment: dept,
 		SudentRustsicated: false,
-		StudentFavCourse: newCourse,
+		StudentFavCourse:  newCourse,
 	}
-	
+
 	d.DepartmentStudents = append(d.DepartmentStudents, newStudent)
-	
+
 	return true, nil
+
+}
+
+func (d *Department) addStudentS(newStudents []Student) (bool, error) {
+
+	if len(newStudents) == 0 {
+		return false, errors.New("Students not supplied!")
+	}
+
+	currentStudents := d.DepartmentStudents
+
+	if len(currentStudents) > 100 {
+		return false, errors.New("A Department cannot have more than 100 students")
+	}
+
 	
+
+	sliceOfNewStudents := newStudents
+	
+
+	d.DepartmentStudents = append(d.DepartmentStudents, sliceOfNewStudents...)
+	
+
+
+	return true, nil
+
+}
+
+func (d *Department) removeStuden(studId int) (bool, error) {
+	currentStudents := d.DepartmentStudents
+
+	if len(currentStudents) == 0 {
+		return false, errors.New("All students removed !")
+	}
+
+	index := slices.IndexFunc(d.DepartmentStudents, func(d Student) bool {
+		return d.StudentId == studId
+	})
+
+	if index == -1 {
+		return false, errors.New("student not found")
+	}
+
+	d.DepartmentStudents = slices.Delete(d.DepartmentStudents, index, index+1)
+
+	return true, nil
+}
+
+func (d *Department) editStudent(studId int, newName string) (bool, error) {
+	currentStudents := d.DepartmentStudents
+
+	if len(currentStudents) == 0 {
+		return false, errors.New("All students removed !")
+	}
+
+	index := slices.IndexFunc(d.DepartmentStudents, func(d Student) bool {
+		return d.StudentId == studId
+	})
+
+	if index == -1 {
+		return false, errors.New("student not found")
+	}
+
+	d.DepartmentStudents[index].StudentName = newName
+
+	return true, nil
+}
+
+func (d *Department) rusticateStudent(studId int) (bool, error) {
+	currentStudents := d.DepartmentStudents
+
+	if len(currentStudents) == 0 {
+		return false, errors.New("All students removed !")
+	}
+
+	index := slices.IndexFunc(d.DepartmentStudents, func(d Student) bool {
+		return d.StudentId == studId
+	})
+
+	if index == -1 {
+		return false, errors.New("student not found")
+	}
+
+	d.DepartmentStudents[index].SudentRustsicated = true
+
+	return true, nil
+}
+
+func (d *Department) reinstateStudent(studId int) (bool, error) {
+	currentStudents := d.DepartmentStudents
+
+	if len(currentStudents) == 0 {
+		return false, errors.New("All students removed !")
+	}
+
+	index := slices.IndexFunc(d.DepartmentStudents, func(d Student) bool {
+		return d.StudentId == studId
+	})
+
+	if index == -1 {
+		return false, errors.New("student not found")
+	}
+
+	d.DepartmentStudents[index].SudentRustsicated = false
+
+	return true, nil
+}
+
+func (d *Department) changeAge(studId int, newAge int) (bool, error) {
+	currentStudents := d.DepartmentStudents
+
+	if len(currentStudents) == 0 {
+		return false, errors.New("All students removed !")
+	}
+
+	index := slices.IndexFunc(d.DepartmentStudents, func(d Student) bool {
+		return d.StudentId == studId
+	})
+
+	if index == -1 {
+		return false, errors.New("student not found")
+	}
+
+	d.DepartmentStudents[index].StudentAge = newAge
+
+	return true, nil
 }
 
 func main() {
