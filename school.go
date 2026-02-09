@@ -176,3 +176,7 @@ func (d *Department) addStudent(studentName string, matricNo string, age int) (b
 	
 }
 
+func main() {
+
+	fmt.Println("Hello World!, this is my school!")
+}
