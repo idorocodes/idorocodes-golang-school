@@ -45,7 +45,7 @@ type Course struct {
 	DepartmentOffered []Department
 }
 
-func (School) addSchool(name string) (School, error) {
+func (School) newSchool(name string) (School, error) {
 	if len(name) <= 0 {
 		return School{}, errors.New("School Name not supplied !")
 	}
@@ -58,27 +58,122 @@ func (School) addSchool(name string) (School, error) {
 	return schoolData, nil
 }
 
-func (s *School) addDepartment(newDepartment Department) (bool, error) {
-	currentDepartment := s.SchoolDepartments
-	if len(currentDepartment) > 10 {
+func (s *School) editSchool(newname string) (bool, error) {
+	if len(newname) <= 0 {
+		return false, errors.New("School Name not supplied !")
+	}
+	s.SchoolName = newname
+	return true, nil
+}
+
+func (s *School) addDepartment(deptName string) (bool, error) {
+
+	if len(deptName) == 0 {
+		return false, errors.New("department name not supplied!")
+	}
+	currentDepartments := s.SchoolDepartments
+	
+	if len(currentDepartments) > 10 {
 		return false, errors.New("A School cannot have more than 10 departments")
 	}
-	currentDepartment = append(currentDepartment, newDepartment)
+	
+	deptId := rand.Int()
+
+	var emptyStudent []Student
+
+	newDept := Department{
+		DepartmentName:     deptName,
+		DepartmentId:       deptId,
+		DepartmentStudents: emptyStudent,
+	}
+	s.SchoolDepartments = append(s.SchoolDepartments, newDept)
 
 	return true, nil
 }
 
 func (s *School) removeDepartment(preferedDepartment Department) (bool, error) {
 	currentDepartments := s.SchoolDepartments
-	if len(currentDepartments) < 0 {
+
+	if len(currentDepartments) == 0 {
 		return false, errors.New("All departments removed !")
 	}
 
-	index := slices.Index(s.SchoolDepartments, preferedDepartment)
+	index := slices.IndexFunc(s.SchoolDepartments, func(d Department) bool {
+		return d.DepartmentId == preferedDepartment.DepartmentId
+	})
+
+	if index == -1 {
+		return false, errors.New("department not found")
+	}
 
 	s.SchoolDepartments = slices.Delete(s.SchoolDepartments, index, index+1)
 
 	return true, nil
+}
+
+func (s *School) editDepartment(departmentId int, newName string) (bool, error) {
+	currentDepartments := s.SchoolDepartments
+
+	if len(currentDepartments) == 0 {
+		return false, errors.New("All departments removed !")
+	}
+
+	if len(newName) == 0 {
+		return false, errors.New("Name not supplied! !")
+	}
+	index := slices.IndexFunc(s.SchoolDepartments, func(d Department) bool {
+		return d.DepartmentId == departmentId
+	})
+
+	if index == -1 {
+		return false, errors.New("department not found")
+	}
+
+	s.SchoolDepartments[index].DepartmentName = newName
+
+	return true, nil
+}
+
+func (d *Department) addStudent(studentName string, matricNo string, age int) (bool,error) {
+	
+	if len(studentName) == 0 {
+		return false, errors.New("Name not supplied!")
+	}
+	
+	if age <= 0 {
+			return false, errors.New("Invalid age!")
+	}
+	
+	if len(matricNo)  == 0 {
+			return false, errors.New("Matric Number not supplied! ")
+	}
+	
+	currentStudents := d.DepartmentStudents
+	
+	if len(currentStudents) > 100 {
+		return false, errors.New("A Department cannot have more than 100 students")
+	}
+	
+	studId := rand.Int()
+	
+	dept := *d
+	
+	var newCourse  []Course
+	
+	newStudent := Student{
+		StudentName: studentName,
+		StudentId: studId,
+		StudentMatricNo:matricNo,
+		StudentAge: age,
+		StudentDepartment: dept,
+		SudentRustsicated: false,
+		StudentFavCourse: newCourse,
+	}
+	
+	d.DepartmentStudents = append(d.DepartmentStudents, newStudent)
+	
+	return true, nil
+	
 }
 
 func main() {
