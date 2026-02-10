@@ -2,7 +2,7 @@
 
 A beginner-friendly Go project that explains core Go concepts using a school system analogy.
 
-This project models a real-world school structure (School → Departments → Students → Courses) to demonstrate how Go handles structs, methods, interfaces, slices, pointers, errors, and basic data modeling.
+This project models a real-world school structure (School → Departments → Students → Courses) to demonstrate how Go handles structs, methods, slices, pointers, errors, and basic data modeling.
 
 Built as a hands-on learning exercise while practicing Go fundamentals.
 
@@ -16,7 +16,6 @@ This project intentionally touches the following Go concepts:
 - Pointer receivers for mutation
 - Error handling with `error`
 - Slice operations (`append`, `slices.IndexFunc`, `slices.Delete`)
-- Interfaces (basic introduction)
 - Package imports and organization
 - Random ID generation
 - Defensive programming (validation + limits)
@@ -146,7 +145,6 @@ Because **abstractions stick better when they map to reality**.
 | Method | Action performed |
 | Pointer receiver | Mutating state |
 | Error handling | Real-life validation |
-| Interface | Behavior contract |
 
 This makes Go concepts easier to visualize, remember, and extend.
 

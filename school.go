@@ -10,12 +10,6 @@ import (
 	"slices"
 )
 
-// interface
-var s interface {
-	remove() bool
-	add() bool
-}
-
 // Data Structures
 type School struct {
 	SchoolName        string
