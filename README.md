@@ -94,9 +94,10 @@ Represents a course offered by departments.
 
 ```go
 type Course struct {
+	CourseId            int
     CourseCode        string
     CourseTitle       string
-    DepartmentOffered []Department
+    DepartmentOffered Department
 }
 ```
 
@@ -120,6 +121,13 @@ type Course struct {
 - `changeAge(studentId, newAge)`
 - `rusticateStudent(studentId)`
 - `reinstateStudent(studentId)`
+
+
+### Student-Level Operations
+
+- `addCourse(code, title)`
+- `removeCourse(cId)`
+- `editCourse(cId, newCode, newTitle)`
 
 All operations:
 
