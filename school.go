@@ -5,7 +5,6 @@ package main
 
 import (
 	"errors"
-	"fmt"
 	"math/rand"
 	"slices"
 )
@@ -387,95 +386,9 @@ func (s *Student) editCourse(cId int, newCode string, newTitle string) (bool, er
 
 func main() {
 
-	//Let's create School and log the output to the console !
-
-	//We use := cause we are initializing and declaring on a single line
-
-	preferedSchoolName := "Idoro School Of Golang"
-
-	schoolData, err := newSchool(preferedSchoolName)
-
-	// This checks if the error is not nill, meaning if an error exists
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	// Print created school data
-	fmt.Println("School Name : ", schoolData.SchoolName)
-	fmt.Println("School Id : ", schoolData.SchoolId)
-	fmt.Println("School Departments : ", schoolData.SchoolDepartments)
-
-	// Let's try to edit the school details, we can only edit the school name
-	newSchoolName := "IDOROCODES SCHOOL OF GOLANG"
-	schoolNameEditSuccess, schoolNameEditError := schoolData.editSchoolName(newSchoolName)
-
-	// Lets manage potential errors during school name editing
-	if schoolNameEditError != nil {
-		fmt.Println(schoolNameEditError)
-	}
-
-	if schoolNameEditSuccess {
-		fmt.Println("School name edited!")
-	}
-
-	// Let's add departments to the school
-
-	firstDepartmentName := "Computer Science"
-	secondDepartmentName := "Mathematics"
-
-	firstDepartmentaddSuccess, firstDepartmentaddFail := schoolData.addDepartment(firstDepartmentName)
-
-	if firstDepartmentaddFail != nil {
-		fmt.Println(firstDepartmentaddFail)
-	}
-
-	if firstDepartmentaddSuccess {
-		fmt.Println("New department added !")
-	}
-
-	secondDepartmentaddSuccess, secondDepartmentaddFail := schoolData.addDepartment(secondDepartmentName)
-
-	if secondDepartmentaddFail != nil {
-		fmt.Println(firstDepartmentaddFail)
-	}
-
-	if secondDepartmentaddSuccess {
-		fmt.Println("Another new  department added !")
-	}
-
-	// Get the department Id
-
-	getDepartmentIdSucess, getDepartmentIdFailure := schoolData.getDepartmentId(secondDepartmentName)
-
-	if getDepartmentIdFailure != nil {
-		fmt.Println(getDepartmentIdFailure)
-	}
-
-	removeDepartmentSuccess, removeDepartmentFailure := schoolData.removeDepartment(getDepartmentIdSucess)
-
-	if removeDepartmentFailure != nil {
-		fmt.Println(removeDepartmentFailure)
-	}
-
-	if removeDepartmentSuccess {
-		fmt.Println("Depatment removed succesfully !")
-	}
-
-	getAnotherDepartmentIdSucess, getAnotherDepartmentIdFailure := schoolData.getDepartmentId(firstDepartmentName)
-
-	if getAnotherDepartmentIdFailure != nil {
-		fmt.Println(getDepartmentIdFailure)
-	}
-
-	editDepartmentSuccess, editDepartmentFailure := schoolData.editDepartment(getAnotherDepartmentIdSucess, "COMPUTER SCIENCE")
-
-	if editDepartmentFailure != nil {
-		fmt.Println(editDepartmentFailure)
-	}
-
-	if editDepartmentSuccess {
-		fmt.Println("Department Edited")
-	}
+	// I know you want to see the tests 
+	// 
+	// I moved it into school-test.go check it there 
 
 }
 

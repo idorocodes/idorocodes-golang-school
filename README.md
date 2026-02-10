@@ -149,11 +149,12 @@ Because **abstractions stick better when they map to reality**.
 This makes Go concepts easier to visualize, remember, and extend.
 
 
-## How to Run
+## How to Test
 
 ```bash
-go run main.go
+go test -v ./...
 ```
+
 
 
 ## Author
