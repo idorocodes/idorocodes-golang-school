@@ -177,7 +177,7 @@ func (d *Department) addStudent(studentName string, matricNo string, age int) (b
 
 }
 
-func (d *Department) addStudentS(newStudents []Student) (bool, error) {
+func (d *Department) addStudents(newStudents []Student) (bool, error) {
 
 	if len(newStudents) == 0 {
 		return false, errors.New("Students not supplied!")
