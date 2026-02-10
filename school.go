@@ -29,7 +29,7 @@ type Student struct {
 	StudentMatricNo   string
 	StudentAge        int
 	StudentDepartment Department
-	SudentRustsicated bool
+	SudentRusticated  bool
 	StudentCourses    []Course
 }
 
@@ -40,7 +40,7 @@ type Course struct {
 	DepartmentOffered Department
 }
 
-func (School) newSchool(name string) (School, error) {
+func newSchool(name string) (School, error) {
 	if len(name) <= 0 {
 		return School{}, errors.New("School Name not supplied !")
 	}
@@ -53,7 +53,7 @@ func (School) newSchool(name string) (School, error) {
 	return schoolData, nil
 }
 
-func (s *School) editSchool(newname string) (bool, error) {
+func (s *School) editSchoolName(newname string) (bool, error) {
 	if len(newname) <= 0 {
 		return false, errors.New("School Name not supplied !")
 	}
@@ -68,7 +68,7 @@ func (s *School) addDepartment(deptName string) (bool, error) {
 	}
 	currentDepartments := s.SchoolDepartments
 
-	if len(currentDepartments) > 10 {
+	if len(currentDepartments) >= 10 {
 		return false, errors.New("A School cannot have more than 10 departments")
 	}
 
@@ -161,7 +161,7 @@ func (d *Department) addStudent(studentName string, matricNo string, age int) (b
 		StudentMatricNo:   matricNo,
 		StudentAge:        age,
 		StudentDepartment: dept,
-		SudentRustsicated: false,
+		SudentRusticated:  false,
 		StudentCourses:    newCourse,
 	}
 
@@ -191,7 +191,7 @@ func (d *Department) addStudents(newStudents []Student) (bool, error) {
 
 }
 
-func (d *Department) removeStuden(studId int) (bool, error) {
+func (d *Department) removeStudent(studId int) (bool, error) {
 	currentStudents := d.DepartmentStudents
 
 	if len(currentStudents) == 0 {
@@ -246,7 +246,7 @@ func (d *Department) rusticateStudent(studId int) (bool, error) {
 		return false, errors.New("student not found")
 	}
 
-	d.DepartmentStudents[index].SudentRustsicated = true
+	d.DepartmentStudents[index].SudentRusticated = true
 
 	return true, nil
 }
@@ -266,7 +266,7 @@ func (d *Department) reinstateStudent(studId int) (bool, error) {
 		return false, errors.New("student not found")
 	}
 
-	d.DepartmentStudents[index].SudentRustsicated = false
+	d.DepartmentStudents[index].SudentRusticated = false
 
 	return true, nil
 }
@@ -306,7 +306,7 @@ func (s *Student) addCourse(code string, title string) (bool, error) {
 		return false, errors.New("Title is not supplied!")
 	}
 
-	rusticatedStatus := s.SudentRustsicated
+	rusticatedStatus := s.SudentRusticated
 
 	if rusticatedStatus {
 		return false, errors.New("Rusticated Students cannot add new courses!")
@@ -334,7 +334,7 @@ func (s *Student) removeCourse(cId int) (bool, error) {
 		return false, errors.New("All courses removed!")
 	}
 
-	rusticatedStatus := s.SudentRustsicated
+	rusticatedStatus := s.SudentRusticated
 
 	if rusticatedStatus {
 		return false, errors.New("Rusticated Students cannot add new courses!")
@@ -344,7 +344,7 @@ func (s *Student) removeCourse(cId int) (bool, error) {
 	})
 
 	if index == -1 {
-		return false, errors.New("student not found")
+		return false, errors.New("course not found")
 	}
 
 	s.StudentCourses = slices.Delete(s.StudentCourses, index, index+1)
@@ -365,7 +365,7 @@ func (s *Student) editCourse(cId int, newCode string, newTitle string) (bool, er
 		return false, errors.New("All courses removed!")
 	}
 
-	rusticatedStatus := s.SudentRustsicated
+	rusticatedStatus := s.SudentRusticated
 
 	if rusticatedStatus {
 		return false, errors.New("Rusticated Students cannot add new courses!")
@@ -379,7 +379,7 @@ func (s *Student) editCourse(cId int, newCode string, newTitle string) (bool, er
 	}
 
 	s.StudentCourses[index].CourseCode = newCode
-	s.StudentCourses[index].CourseCode = newTitle
+	s.StudentCourses[index].CourseTitle = newTitle
 
 	return true, nil
 
@@ -387,5 +387,121 @@ func (s *Student) editCourse(cId int, newCode string, newTitle string) (bool, er
 
 func main() {
 
-	fmt.Println("Hello World!, this is my school!")
+	//Let's create School and log the output to the console !
+
+	//We use := cause we are initializing and declaring on a single line
+
+	preferedSchoolName := "Idoro School Of Golang"
+
+	schoolData, err := newSchool(preferedSchoolName)
+
+	// This checks if the error is not nill, meaning if an error exists
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	// Print created school data
+	fmt.Println("School Name : ", schoolData.SchoolName)
+	fmt.Println("School Id : ", schoolData.SchoolId)
+	fmt.Println("School Departments : ", schoolData.SchoolDepartments)
+
+	// Let's try to edit the school details, we can only edit the school name
+	newSchoolName := "IDOROCODES SCHOOL OF GOLANG"
+	schoolNameEditSuccess, schoolNameEditError := schoolData.editSchoolName(newSchoolName)
+
+	// Lets manage potential errors during school name editing
+	if schoolNameEditError != nil {
+		fmt.Println(schoolNameEditError)
+	}
+
+	if schoolNameEditSuccess {
+		fmt.Println("School name edited!")
+	}
+
+	// Let's add departments to the school
+
+	firstDepartmentName := "Computer Science"
+	secondDepartmentName := "Mathematics"
+
+	firstDepartmentaddSuccess, firstDepartmentaddFail := schoolData.addDepartment(firstDepartmentName)
+
+	if firstDepartmentaddFail != nil {
+		fmt.Println(firstDepartmentaddFail)
+	}
+
+	if firstDepartmentaddSuccess {
+		fmt.Println("New department added !")
+	}
+
+	secondDepartmentaddSuccess, secondDepartmentaddFail := schoolData.addDepartment(secondDepartmentName)
+
+	if secondDepartmentaddFail != nil {
+		fmt.Println(firstDepartmentaddFail)
+	}
+
+	if secondDepartmentaddSuccess {
+		fmt.Println("Another new  department added !")
+	}
+
+	// Get the department Id
+
+	getDepartmentIdSucess, getDepartmentIdFailure := schoolData.getDepartmentId(secondDepartmentName)
+
+	if getDepartmentIdFailure != nil {
+		fmt.Println(getDepartmentIdFailure)
+	}
+
+	removeDepartmentSuccess, removeDepartmentFailure := schoolData.removeDepartment(getDepartmentIdSucess)
+
+	if removeDepartmentFailure != nil {
+		fmt.Println(removeDepartmentFailure)
+	}
+
+	if removeDepartmentSuccess {
+		fmt.Println("Depatment removed succesfully !")
+	}
+
+	getAnotherDepartmentIdSucess, getAnotherDepartmentIdFailure := schoolData.getDepartmentId(firstDepartmentName)
+
+	if getAnotherDepartmentIdFailure != nil {
+		fmt.Println(getDepartmentIdFailure)
+	}
+
+	editDepartmentSuccess, editDepartmentFailure := schoolData.editDepartment(getAnotherDepartmentIdSucess, "COMPUTER SCIENCE")
+
+	if editDepartmentFailure != nil {
+		fmt.Println(editDepartmentFailure)
+	}
+
+	if editDepartmentSuccess {
+		fmt.Println("Department Edited")
+	}
+
+}
+
+func (s *School) getDepartmentId(deptName string) (int, error) {
+	for _, d := range s.SchoolDepartments {
+		if d.DepartmentName == deptName {
+			return d.DepartmentId, nil
+		}
+	}
+	return 0, errors.New("department not found")
+}
+
+func (d *Department) getStudentId(studentMatricNo string) (int, error) {
+	for _, d := range d.DepartmentStudents {
+		if d.StudentMatricNo == studentMatricNo {
+			return d.StudentId, nil
+		}
+	}
+	return 0, errors.New("student not found")
+}
+
+func (s *Student) getCourseId(courseCode string) (int, error) {
+	for _, d := range s.StudentCourses {
+		if d.CourseCode == courseCode {
+			return d.CourseId, nil
+		}
+	}
+	return 0, errors.New("course not found")
 }
