@@ -36,13 +36,14 @@ type Student struct {
 	StudentAge        int
 	StudentDepartment Department
 	SudentRustsicated bool
-	StudentFavCourse  []Course
+	StudentCourses    []Course
 }
 
 type Course struct {
+	CourseId          int
 	CourseCode        string
 	CourseTitle       string
-	DepartmentOffered []Department
+	DepartmentOffered Department
 }
 
 func (School) newSchool(name string) (School, error) {
@@ -167,7 +168,7 @@ func (d *Department) addStudent(studentName string, matricNo string, age int) (b
 		StudentAge:        age,
 		StudentDepartment: dept,
 		SudentRustsicated: false,
-		StudentFavCourse:  newCourse,
+		StudentCourses:    newCourse,
 	}
 
 	d.DepartmentStudents = append(d.DepartmentStudents, newStudent)
@@ -188,14 +189,9 @@ func (d *Department) addStudentS(newStudents []Student) (bool, error) {
 		return false, errors.New("A Department cannot have more than 100 students")
 	}
 
-	
-
 	sliceOfNewStudents := newStudents
-	
 
 	d.DepartmentStudents = append(d.DepartmentStudents, sliceOfNewStudents...)
-	
-
 
 	return true, nil
 
@@ -299,6 +295,100 @@ func (d *Department) changeAge(studId int, newAge int) (bool, error) {
 	d.DepartmentStudents[index].StudentAge = newAge
 
 	return true, nil
+}
+
+func (s *Student) addCourse(code string, title string) (bool, error) {
+
+	currentCourses := s.StudentCourses
+	if len(currentCourses) > 10 {
+		return false, errors.New("Student cannot offer more than 10 courses!!")
+	}
+
+	if len(code) == 0 {
+		return false, errors.New("Code is not supplied!")
+	}
+
+	if len(title) == 0 {
+		return false, errors.New("Title is not supplied!")
+	}
+
+	rusticatedStatus := s.SudentRustsicated
+
+	if rusticatedStatus {
+		return false, errors.New("Rusticated Students cannot add new courses!")
+	}
+
+	newCourseId := rand.Int()
+	newCourse := Course{
+		CourseCode:        code,
+		CourseTitle:       title,
+		CourseId:          newCourseId,
+		DepartmentOffered: s.StudentDepartment,
+	}
+
+	s.StudentCourses = append(s.StudentCourses, newCourse)
+
+	return true, nil
+
+}
+
+func (s *Student) removeCourse(cId int) (bool, error) {
+
+	currentCourses := s.StudentCourses
+
+	if len(currentCourses) == 0 {
+		return false, errors.New("All courses removed!")
+	}
+
+	rusticatedStatus := s.SudentRustsicated
+
+	if rusticatedStatus {
+		return false, errors.New("Rusticated Students cannot add new courses!")
+	}
+	index := slices.IndexFunc(s.StudentCourses, func(d Course) bool {
+		return d.CourseId == cId
+	})
+
+	if index == -1 {
+		return false, errors.New("student not found")
+	}
+
+	s.StudentCourses = slices.Delete(s.StudentCourses, index, index+1)
+
+	return true, nil
+
+}
+
+func (s *Student) editCourse(cId int, newCode string, newTitle string) (bool, error) {
+
+	if len(newCode) == 0 || len(newTitle) == 0 {
+		return false, errors.New("Course Code or Title not Found!")
+	}
+
+	currentCourses := s.StudentCourses
+
+	if len(currentCourses) == 0 {
+		return false, errors.New("All courses removed!")
+	}
+
+	rusticatedStatus := s.SudentRustsicated
+
+	if rusticatedStatus {
+		return false, errors.New("Rusticated Students cannot add new courses!")
+	}
+	index := slices.IndexFunc(s.StudentCourses, func(d Course) bool {
+		return d.CourseId == cId
+	})
+
+	if index == -1 {
+		return false, errors.New("student not found")
+	}
+
+	s.StudentCourses[index].CourseCode = newCode
+	s.StudentCourses[index].CourseCode = newTitle
+
+	return true, nil
+
 }
 
 func main() {
